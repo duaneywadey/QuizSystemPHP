@@ -78,21 +78,22 @@ function setCorrectAnswerToQuestion($conn, $quiz_id, $question_id, $choice_id) {
 	$sql = "
 			SELECT 
 				quizzes.quiz_id AS quiz_id,
-				questions.description AS questionDescription,
-				choices.description AS choiceDescription,
-				choices.is_correct_answer AS isCorrectAnswer 
-			FROM questions
-			INNER JOIN quizzes ON questions.quiz_id = quizzes.quiz_id
-			INNER JOIN choices ON questions.question_id = choices.question_id
-			WHERE 
-				quizzes.quiz_id = ?
-				questions.question_id = ? 
-				AND choices.is_correct_answer = 1
-			GROUP BY questionDescription
+				questions.question_id AS question_id, 
+				questions.description AS questionDescription, 
+				choices.choice_id AS choice_id,
+				choices.description AS choiceDescription, 
+				COUNT(choices.is_correct_answer) AS isCorrectAnswer 
+			FROM questions 
+			INNER JOIN quizzes ON questions.quiz_id = quizzes.quiz_id 
+			INNER JOIN choices ON questions.question_id = choices.question_id 
+			WHERE
+				quizzes.quiz_id = ? AND questions.question_id = ?
+				AND choices.is_correct_answer = 1 
+			GROUP BY questionDescription;
 			";
 
 	$stmt = $conn->prepare($sql);
-	$stmt->execute([$question_id]);
+	$stmt->execute([$quiz_id, $question_id]);
 
 	if(!$stmt->rowCount() == 1) {
 		$sql = "

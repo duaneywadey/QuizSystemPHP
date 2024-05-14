@@ -39,8 +39,7 @@ require_once('mvc/model.php');
 		<form action="mvc/controller.php?quiz_id=<?php echo $_GET['quiz_id'] ?>&question_id=<?php echo $_GET['question_id']; ?>" method="POST">
 			<?php foreach ($showAllChoicesByQuestion as $row) { ?>
 				<div class="choice">
-					<input type="radio" id="child" name="choiceFromQuestion" value="child">
-					<input type="hidden" value="<?php echo $row['choice_id'] ?>" name="choice">
+					<input type="radio" id="child" name="choice_id" value="<?php echo $row['choice_id'] ?>">
 					<label for="child"><?php echo $row['description']; ?></label><br>	
 				</div>
 			<?php } ?>

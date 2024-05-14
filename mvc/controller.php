@@ -24,8 +24,8 @@ if (isset($_POST['addNewChoiceBtn'])) {
 }
 
 if (isset($_POST['setNewAnswerBtn'])) {
-	$choiceFromQuestion = $_POST['choiceFromQuestion'];
-	setCorrectAnswerToQuestion($conn, $_GET['question_id'],)	
+	$choice_id = $_POST['choice_id'];
+	setCorrectAnswerToQuestion($conn, $_GET['question_id'], $_GET['quiz_id'], $choice_id);	
 }
 
 
