@@ -29,7 +29,7 @@ if (isset($_POST['setNewAnswerBtn'])) {
 
 	if(!empty($choice_id)) {
 		
-		if(setCorrectAnswerToQuestion($conn, $_GET['question_id'], $_GET['quiz_id'], $choice_id)) {
+		if(setCorrectAnswerToQuestion($conn, $_GET['quiz_id'], $_GET['question_id'], $choice_id)) {
 			header('Location: ../addNewChoice.php?quiz_id=' . $_GET['quiz_id'] . '&question_id=' . $_GET['question_id']);
 		}
 

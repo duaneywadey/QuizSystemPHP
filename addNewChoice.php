@@ -37,12 +37,25 @@ require_once('mvc/model.php');
 		<h1>Choices </h1>
 		<?php $showAllChoicesByQuestion = showAllChoicesToEachQuestion($conn, $_GET['quiz_id'], $_GET['question_id']); ?>
 		<form action="mvc/controller.php?quiz_id=<?php echo $_GET['quiz_id'] ?>&question_id=<?php echo $_GET['question_id']; ?>" method="POST">
-			<?php foreach ($showAllChoicesByQuestion as $row) { ?>
-				<div class="choice">
+
+			<?php 
+			$getCorrectAnswer = checkIfCorrectAns($conn, $_GET['question_id']);
+			foreach ($showAllChoicesByQuestion as $row) { ?>
+
+				<div class="choice" 
+				style="
+				<?php  
+					if(in_array($row['choice_id'], $getCorrectAnswer)) {
+						echo "background-color: yellow;";
+					}
+				?>
+				"> 
 					<input type="radio" id="child" name="choice_id" value="<?php echo $row['choice_id'] ?>">
 					<label for="child"><?php echo $row['description']; ?></label><br>	
 				</div>
+
 			<?php } ?>
+
 			<input type="submit" value="Submit" name="setNewAnswerBtn">
 		</form>		
 	</div>

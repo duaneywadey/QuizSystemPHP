@@ -1,5 +1,7 @@
 <?php  
 
+require_once('dbConfig.php');
+
 function showAllQuizzes($conn) {
 	$sql = "SELECT * FROM quizzes";
 	$stmt = $conn->prepare($sql);
@@ -74,41 +76,31 @@ function showAllChoicesToEachQuestion($conn, $quiz_id, $question_id) {
 	return $stmt->fetchAll();
 }
 
-function setCorrectAnswerToQuestion($conn, $quiz_id, $question_id, $choice_id) {
-	$sql = "
-			SELECT 
-				quizzes.quiz_id AS quiz_id,
-				questions.question_id AS question_id, 
-				questions.description AS questionDescription, 
-				choices.choice_id AS choice_id,
-				choices.description AS choiceDescription, 
-				COUNT(choices.is_correct_answer) AS isCorrectAnswer 
-			FROM questions 
-			INNER JOIN quizzes ON questions.quiz_id = quizzes.quiz_id 
-			INNER JOIN choices ON questions.question_id = choices.question_id 
-			WHERE
-				quizzes.quiz_id = ? AND questions.question_id = ?
-				AND choices.is_correct_answer = 1 
-			GROUP BY questionDescription;
+function checkIfCorrectAns($conn, $question_id) {
+	$sql = "SELECT * FROM choices 
+			WHERE question_id = ? 
+			AND is_correct_answer = 1
 			";
-
 	$stmt = $conn->prepare($sql);
-	$stmt->execute([$quiz_id, $question_id]);
-
-	if(!$stmt->rowCount() == 1) {
-		$sql = "
-				UPDATE choices 
-				SET is_correct_answer = 1 
-				WHERE choice_id = ?
-				";
-		$stmt = $conn->prepare($sql);
-		$stmt->execute([$choice_id]);
+	$stmt->execute([$question_id]);
+	$allData = $stmt->fetchAll();
+	$correctAnswers = array();
+	foreach ($allData as $row) {
+		array_push($correctAnswers, $row['choice_id']);
 	}
-	else {
-		return false;
-	}
+	return $correctAnswers;
 }
 
+
+function setCorrectAnswerToQuestion($conn, $quiz_id, $question_id, $choice_id) {
+	$sql = "UPDATE choices 
+			SET is_correct_answer = 1 
+			WHERE choice_id = ? 
+			AND question_id = ?
+			";
+	$stmt = $conn->prepare($sql);
+	return $stmt->execute([$choice_id, $question_id]);
+}
 
 
 ?>
