@@ -91,16 +91,45 @@ function checkIfCorrectAns($conn, $question_id) {
 	return $correctAnswers;
 }
 
+function checkIfCorrectAnsExists($conn, $question_id) {
+	$sql = "SELECT * FROM choices
+			WHERE is_correct_answer = 1 
+			AND question_id = ?
+			";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute([$question_id]);
+	$rowCount = $stmt->rowCount();
+	return $rowCount;
+}
+
+function makeOtherChoicesWrong($conn, $question_id) {
+	$sql = "UPDATE choices 
+			SET is_correct_answer = 0
+			WHERE question_id = ?  
+			";
+	$stmt = $conn->prepare($sql);
+	return $stmt->execute([$question_id]);
+}
 
 function setCorrectAnswerToQuestion($conn, $quiz_id, $question_id, $choice_id) {
-	$sql = "UPDATE choices 
+
+	if(makeOtherChoicesWrong($conn, $question_id)) {
+		$sql = "UPDATE choices 
 			SET is_correct_answer = 1 
 			WHERE choice_id = ? 
 			AND question_id = ?
 			";
-	$stmt = $conn->prepare($sql);
-	return $stmt->execute([$choice_id, $question_id]);
+		$stmt = $conn->prepare($sql);
+		return $stmt->execute([$choice_id, $question_id]);
+	}
+	else {
+		return false;
+	}	
+	
 }
 
+
+// $rowCountTest = checkIfCorrectAnsExists($conn,8);
+// echo $rowCountTest;
 
 ?>
