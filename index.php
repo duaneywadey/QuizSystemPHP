@@ -18,7 +18,7 @@ require_once('mvc/model.php');
 	<div class="container">
 		<?php foreach ($allQuizzes as $row) { ?>
 		<div class="quiz">
-			<p><a href="takeQuiz.php"><?php echo $row['title']; ?></a></p>
+			<p><a href="takeQuiz.php?quiz_id=<?php echo $row['quiz_id']; ?>"><?php echo $row['title']; ?></a></p>
 		</div>	
 		<?php } ?>
 	</div>

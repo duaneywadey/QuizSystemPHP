@@ -1,3 +1,9 @@
+<?php  
+session_start();
+require_once('mvc/dbConfig.php');
+require_once('mvc/model.php');
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,19 +13,30 @@
 	<link rel="stylesheet" href="styles/styles.css">
 </head>
 <body>
-	<h1>Quiz system</h1>
+	<?php $quizInfo = getQuizByID($conn, $_GET['quiz_id']); ?>
+	<h1><?php echo $quizInfo['title']; ?></h1>
 	<?php include('links.php'); ?>
-	<!-- <div class="question">
-		<form action="mvc/controller.php" method="POST">
-			<p>Lorem, ipsum dolor sit amet consectetur adipisicing, elit. Cum illo, tempora impedit natus minus voluptates soluta, aperiam vitae reiciendis eaque. Et sapiente animi aperiam iure magni distinctio, cupiditate, ea. Voluptatibus?</p>
-			<input type="radio" id="html" name="fav_language" value="HTML">
-			<label for="html">HTML</label><br>
-			<input type="radio" id="css" name="fav_language" value="CSS">
-			<label for="css">CSS</label><br>
-			<input type="radio" id="javascript" name="fav_language" value="JavaScript">
-			<label for="javascript">JavaScript</label>
-			<p><input type="submit" value="Submit" name="submitAnsBtn"></p>
+
+	<div class="question">
+		<ol>
+		<?php $allQuestions = showAllQuestionsByQuizID($conn, $_GET['quiz_id']); ?>
+		<?php foreach ($allQuestions as $row) { ?>
+			<li>
+				<form action="mvc/controller.php" method="POST">
+					<p><?php echo $row['description']; ?></p>
+
+					<?php $allChoices = showAllChoicesByQuestionID($conn, $row['question_id']); ?>
+					<?php foreach ($allChoices as $choice) { ?>
+					<div class="choice">
+						<input type="radio" id="javascript" name="fav_language" value="JavaScript">
+						<label for="javascript"><?php echo $choice['description']; ?></label>
+					</div>
+					<?php } ?>
+			</li>
+		<?php } ?>
+		</ol>
+		<p><input type="submit" value="Submit" name="submitAnsBtn"></p>
 		</form>
-	</div> -->
+	</div>
 </body>
 </html>

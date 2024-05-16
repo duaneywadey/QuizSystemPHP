@@ -26,7 +26,7 @@ function getQuizByID($conn, $quiz_id) {
 			";
 	$stmt = $conn->prepare($sql);
 	$stmt->execute([$quiz_id]);
-	return $stmt->fetchAll();
+	return $stmt->fetch();
 }
 
 function addAQuestion($conn, $description, $quiz_id) {
@@ -44,6 +44,15 @@ function showAllQuestionsByQuizID($conn, $quiz_id) {
 			";
 	$stmt = $conn->prepare($sql);
 	$stmt->execute([$quiz_id]);
+	return $stmt->fetchAll();
+}
+
+function showAllChoicesByQuestionID($conn, $question_id) {
+	$sql = "SELECT * FROM choices 
+			WHERE question_id = ?
+			";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute([$question_id]);
 	return $stmt->fetchAll();
 }
 
@@ -124,12 +133,26 @@ function setCorrectAnswerToQuestion($conn, $quiz_id, $question_id, $choice_id) {
 	}
 	else {
 		return false;
-	}	
+	}	 
 	
 }
 
+function findCorrectAnswerToQuestion($conn, $question_id) {
+	$sql = "
+			SELECT * FROM choices 
+			WHERE question_id = ? 
+			AND is_correct_answer = 1
+			";
 
-// $rowCountTest = checkIfCorrectAnsExists($conn,8);
-// echo $rowCountTest;
+	$stmt = $conn->prepare($sql);
+	$stmt->execute([$question_id]);
+	$correctAns = $stmt->fetch();
+	return $correctAns;
+}
+
+// To find correct answer
+// $rowCountTest = findCorrectAnswerToQuestion($conn,8);
+// echo $rowCountTest['description'];
+// echo "<br>" . $rowCountTest['choice_id'];
 
 ?>
