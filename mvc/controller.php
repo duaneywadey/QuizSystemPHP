@@ -49,6 +49,7 @@ if(isset($_POST['submitAnswersBtn'])) {
 	$allInputs = $_POST;
 	var_dump($allInputs);
 	$questionsAndAnswers = array();
+	$quizResult = array();
 	$random = 'abcdefghijklmnopqrstuvwxyz0123456789';
 	$string = '';
 	for ($i = 0; $i < 10; $i++) {
@@ -64,8 +65,17 @@ if(isset($_POST['submitAnswersBtn'])) {
 	}
 	foreach ($questionsAndAnswers as $question => $answer) {
 		insertNewSubmission($conn, $string, $_GET['quiz_id'], $question, $answer);
+		$isCorrect = validateAnswer($conn, $question, $answer);
+		array_push($quizResult, $isCorrect);
 	}
-	echo "Successful!";
+	$counter = 0;
+	foreach ($quizResult as $key => $value) {
+		if($value == true) {
+			$counter+=1;
+		}
+	}
+	echo "<br>Score: " . $counter . "/" . count($quizResult) . "<br>"; 
+
 }
 
 ?>

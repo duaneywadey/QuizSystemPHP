@@ -159,9 +159,26 @@ function insertNewSubmission($conn, $attempt_id, $quiz_id, $question_id, $choice
 	return $stmt->execute([$attempt_id, $quiz_id, $question_id, $choice_id]);
 }
 
-// To find correct answer
-// $rowCountTest = findCorrectAnswerToQuestion($conn,8);
-// echo $rowCountTest['description'];
-// echo "<br>" . $rowCountTest['choice_id'];
+function validateAnswer($conn, $question_id, $choice_id) {
+	$sql = "SELECT choice_id 
+			FROM choices 
+			WHERE question_id = ? 
+			AND is_correct_answer = 1
+			";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute([$question_id]);
+	$answer = $stmt->fetch();
+	$correctAns = $answer['choice_id'];
+
+	if ($choice_id == $correctAns) {
+		return true;
+	}
+	else {
+		return false;
+	}
+
+}
+ 
+
 
 ?>
