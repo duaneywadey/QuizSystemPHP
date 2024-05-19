@@ -2,6 +2,8 @@
 session_start();
 require_once('mvc/dbConfig.php');
 require_once('mvc/model.php');
+
+$answersList = array();
 ?>
 
 <!DOCTYPE html>
@@ -22,20 +24,21 @@ require_once('mvc/model.php');
 		<?php $allQuestions = showAllQuestionsByQuizID($conn, $_GET['quiz_id']); ?>
 		<?php foreach ($allQuestions as $row) { ?>
 			<li>
-				<form action="mvc/controller.php" method="POST">
+				<form action="mvc/controller.php?quiz_id=<?php echo $_GET['quiz_id']; ?>" method="POST">
 					<p><?php echo $row['description']; ?></p>
 
 					<?php $allChoices = showAllChoicesByQuestionID($conn, $row['question_id']); ?>
 					<?php foreach ($allChoices as $choice) { ?>
 					<div class="choice">
-						<input type="radio" id="javascript" name="fav_language" value="JavaScript">
+						<?php array_push($answersList, $choice['choice_id']); ?>
+						<input type="radio" id="javascript" name="<?php echo $row['question_id']; ?>" value="<?php echo $choice['choice_id']; ?>">
 						<label for="javascript"><?php echo $choice['description']; ?></label>
 					</div>
 					<?php } ?>
 			</li>
 		<?php } ?>
 		</ol>
-		<p><input type="submit" value="Submit" name="submitAnsBtn"></p>
+		<p><input type="submit" value="Submit" name="submitAnswersBtn"></p>
 		</form>
 	</div>
 </body>

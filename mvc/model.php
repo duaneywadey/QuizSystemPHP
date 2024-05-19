@@ -150,6 +150,15 @@ function findCorrectAnswerToQuestion($conn, $question_id) {
 	return $correctAns;
 }
 
+function insertNewSubmission($conn, $attempt_id, $quiz_id, $question_id, $choice_id) {
+	$sql = "
+			INSERT INTO submissions (attempt_id, quiz_id, question_id, choice_id)
+			VALUES(?,?,?,?)
+			";
+	$stmt = $conn->prepare($sql);
+	return $stmt->execute([$attempt_id, $quiz_id, $question_id, $choice_id]);
+}
+
 // To find correct answer
 // $rowCountTest = findCorrectAnswerToQuestion($conn,8);
 // echo $rowCountTest['description'];

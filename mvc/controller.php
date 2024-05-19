@@ -45,10 +45,27 @@ if (isset($_POST['setNewAnswerBtn'])) {
 }
 
 
-// if(isset($_POST['submitAnsBtn'])) {
-// 	$fav_language = $_POST['fav_language'];
-// 	echo $fav_language;
-// }
-
+if(isset($_POST['submitAnswersBtn'])) {
+	$allInputs = $_POST;
+	var_dump($allInputs);
+	$questionsAndAnswers = array();
+	$random = 'abcdefghijklmnopqrstuvwxyz0123456789';
+	$string = '';
+	for ($i = 0; $i < 10; $i++) {
+      $string .= $random [rand(0, strlen($random ) - 1)];
+  	}
+	foreach ($allInputs as $key => $value) {
+		if($key == "submitAnswersBtn" && $value = "Submit") {
+			break;
+		}
+		else {
+			$questionsAndAnswers[$key] = $value; 			
+		}
+	}
+	foreach ($questionsAndAnswers as $question => $answer) {
+		insertNewSubmission($conn, $string, $_GET['quiz_id'], $question, $answer);
+	}
+	echo "Successful!";
+}
 
 ?>
