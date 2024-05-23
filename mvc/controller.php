@@ -75,6 +75,7 @@ if(isset($_POST['submitAnswersBtn'])) {
 		}
 	}
 	echo "<br>Score: " . $counter . "/" . count($quizResult) . "<br>"; 
+	header("Location: ../displayResult.php?counter=" . $counter . "&quizResult=" . count($quizResult));
 
 }
 
