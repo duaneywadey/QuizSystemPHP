@@ -2,6 +2,10 @@
 session_start();
 require_once('mvc/dbConfig.php');
 require_once('mvc/model.php');
+
+if(!isset($_SESSION['username'])) {
+	header('Location: login.php');
+}
 ?>
 <html lang="en">
 <head>

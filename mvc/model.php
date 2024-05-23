@@ -2,6 +2,12 @@
 
 require_once('dbConfig.php');
 
+function registerAUser($conn, $username, $password) {
+	$sql = "INSERT INTO users (users,password) VALUES(?,?)";
+	$stmt = $conn->prepare($sql);
+	return $stmt->execute([$username, $password]);
+}
+
 function showAllQuizzes($conn) {
 	$sql = "SELECT * FROM quizzes";
 	$stmt = $conn->prepare($sql);
