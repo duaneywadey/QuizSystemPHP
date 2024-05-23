@@ -13,15 +13,12 @@ require_once('mvc/model.php');
 </head>
 <body>
 	<?php include('links.php'); ?>
-	
 	<div class="addAQuestion">
 		<h1>
 			<?php 
 
 			$getQuizByID = getQuizByID($conn, $_GET['quiz_id']);
-			foreach ($getQuizByID as $row) {
-				echo $row['title'];
-			}
+			echo $getQuizByID['title'];
 
 			?>
 		</h1>

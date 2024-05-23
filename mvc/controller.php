@@ -24,21 +24,15 @@ if (isset($_POST['addNewChoiceBtn'])) {
 }
 
 if (isset($_POST['setNewAnswerBtn'])) {
-
 	$choice_id = $_POST['choice_id'];
-
 	if(!empty($choice_id)) {
-		
 		if(setCorrectAnswerToQuestion($conn, $_GET['quiz_id'], $_GET['question_id'], $choice_id)) {
 			header('Location: ../addNewChoice.php?quiz_id=' . $_GET['quiz_id'] . '&question_id=' . $_GET['question_id']);
 		}
-
 		else {
 			echo "Already has an answer!";
 		}
-
 	}
-
 	else {
 		echo "Dont leave the radio button empty!";
 	}
