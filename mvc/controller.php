@@ -17,6 +17,18 @@ if(isset($_POST['loginBtn'])) {
 	}
 }
 
+if(isset($_POST['registerBtn'])) {
+	$username = $_POST['username'];
+	$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+	if(!empty($username) && !empty($password) && registerAUser($conn, $username, $password)){
+		header('Location: ../login.php');
+	}
+	else {
+		header('Location: ../register.php');
+	}
+}
+
 
 if(isset($_POST['addNewQuizBtn'])) {
 	$title = $_POST['title'];

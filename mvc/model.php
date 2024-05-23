@@ -3,7 +3,7 @@
 require_once('dbConfig.php');
 
 function registerAUser($conn, $username, $password) {
-	$sql = "INSERT INTO users (users,password) VALUES(?,?)";
+	$sql = "INSERT INTO users (username,password) VALUES(?,?)";
 	$stmt = $conn->prepare($sql);
 	return $stmt->execute([$username, $password]);
 }
