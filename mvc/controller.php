@@ -4,6 +4,19 @@ session_start();
 require_once('dbConfig.php');
 require_once('model.php');
 
+if(isset($_POST['loginBtn'])) {
+	$username = $_POST['username'];
+	$password = $_POST['password'];
+
+	if(!empty($username) && !empty($password) && loginUser($conn, $username, $password)) {
+		header('Location: ../index.php');
+	}
+
+	else {
+		header('Location: ../login.php');
+	}
+}
+
 
 if(isset($_POST['addNewQuizBtn'])) {
 	$title = $_POST['title'];

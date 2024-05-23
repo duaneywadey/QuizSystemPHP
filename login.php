@@ -43,7 +43,7 @@ require_once('mvc/model.php');
 	<form action="mvc/controller.php" method="POST">
 		<input type="text" name="username" placeholder="Username here">	
 		<input type="password" name="password" placeholder="Password here">	
-		<input type="submit" value="Submit">
+		<input type="submit" value="Submit" name="loginBtn">
 	</form>
 	<h3>No account yet? Register <a href="register.php">here</a></h3>
 </body>

@@ -16,6 +16,7 @@ if(!isset($_SESSION['username'])) {
 </head>
 <body>
 	<h1>All Quizzes</h1>
+	<h2>Hello there! <span style="color: green;"><?php echo $_SESSION['username']; ?></span></h2>
 	<?php include('links.php'); ?>
 	
 	<?php $allQuizzes = showAllQuizzes($conn); ?>
