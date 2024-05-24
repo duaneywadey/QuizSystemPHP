@@ -3,9 +3,21 @@
 require_once('dbConfig.php');
 
 function registerAUser($conn, $username, $password) {
-	$sql = "INSERT INTO users (username,password) VALUES(?,?)";
+
+	$sql = "SELECT * FROM users WHERE username=?";
 	$stmt = $conn->prepare($sql);
-	return $stmt->execute([$username, $password]);
+	$stmt->execute([$username]);
+
+	if($stmt->rowCount()==0) {
+		$sql = "INSERT INTO users (username,password) VALUES(?,?)";
+		$stmt = $conn->prepare($sql);
+		return $stmt->execute([$username, $password]);
+	}
+	else {
+		return false;
+	}
+
+	
 }
 
 function loginUser($conn, $username, $password) {
@@ -23,6 +35,7 @@ function loginUser($conn, $username, $password) {
 
 		// Get individual values from userInfoRow
 		$user_id = $userInfoRow['user_id'];
+		$is_admin = $userInfoRow['is_admin'];
 		$username = $userInfoRow['username'];
 		$hashedPassword = $userInfoRow['password'];
 
@@ -31,10 +44,44 @@ function loginUser($conn, $username, $password) {
 
 			// If the inputted password and password from the database are both same, store user info as session variables. 
 			$_SESSION['user_id'] = $user_id;
+			$_SESSION['is_admin'] = $is_admin;
 			$_SESSION['username'] = $username;
 			return true;
 		}
 	}
+}
+
+function requestAsAdmin($conn, $user_id, $admin_request_letter) {
+
+	$sql = "SELECT * FROM admin_requests WHERE user_id=?";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute([$user_id]);
+
+	if($stmt->rowCount() == 0) {
+		$sql = "INSERT INTO admin_requests (user_id, admin_request_letter) 
+			VALUES(?,?)
+			";
+		$stmt = $conn->prepare($sql);
+		return $stmt->execute([$user_id, $admin_request_letter]);
+	}
+
+	else {
+		return false;
+	}
+	
+}
+
+function showAllAdminRequests($conn) {
+	$sql = "
+			SELECT 
+				users.username AS username,
+				admin_requests.admin_request_letter AS admin_request_letter
+			FROM users
+			JOIN admin_requests ON users.user_id = admin_requests.user_id
+			";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute();
+	return $stmt->fetchAll();
 }
 
 function showAllQuizzes($conn) {

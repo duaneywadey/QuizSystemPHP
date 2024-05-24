@@ -29,6 +29,15 @@ if(isset($_POST['registerBtn'])) {
 	}
 }
 
+if(isset($_POST['requestAsAdminBtn'])) {
+	$adminRequestLetter = $_POST['adminRequestLetter'];
+	if(requestAsAdmin($conn, $_SESSION['user_id'], $adminRequestLetter)) {
+		header('Location: ../index.php');
+	}
+	else {
+		header('Location: ../request_as_admin.php');
+	}
+}
 
 if(isset($_POST['addNewQuizBtn'])) {
 	$title = $_POST['title'];
