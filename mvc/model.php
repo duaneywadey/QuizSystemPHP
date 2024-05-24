@@ -73,15 +73,35 @@ function requestAsAdmin($conn, $user_id, $admin_request_letter) {
 
 function showAllAdminRequests($conn) {
 	$sql = "
-			SELECT 
+			SELECT
+				admin_requests.admin_request_id AS admin_request_id, 
+				users.user_id AS user_id,
 				users.username AS username,
 				admin_requests.admin_request_letter AS admin_request_letter
 			FROM users
 			JOIN admin_requests ON users.user_id = admin_requests.user_id
+			WHERE admin_requests.is_approved = 0
 			";
 	$stmt = $conn->prepare($sql);
 	$stmt->execute();
 	return $stmt->fetchAll();
+}
+
+function approveAdminRequest($conn, $admin_user_id, $admin_request_id) {
+	$sql = "
+			UPDATE admin_requests 
+			SET approved_by = ?, 
+			is_approved = 1 
+			WHERE admin_request_id = ?
+			";
+	$stmt = $conn->prepare($sql);
+	return $stmt->execute([$admin_user_id, $admin_request_id]);
+}
+
+function setUserToAdmin($conn, $user_id) {
+	$sql = "UPDATE users SET is_admin = 1 WHERE user_id = ?";
+	$stmt = $conn->prepare($sql);
+	return $stmt->execute([$user_id]);
 }
 
 function showAllQuizzes($conn) {

@@ -39,6 +39,14 @@ if(isset($_POST['requestAsAdminBtn'])) {
 	}
 }
 
+if(isset($_POST['acceptAdminRequestBtn'])) {
+	if(approveAdminRequest($conn, $_SESSION['user_id'], $_POST['admin_request_id'])) {
+		if(setUserToAdmin($conn, $_POST['user_id'])) {
+			header('Location: ../admin_requests.php');
+		}
+	}
+}
+
 if(isset($_POST['addNewQuizBtn'])) {
 	$title = $_POST['title'];
 	addNewQuiz($conn, $title);

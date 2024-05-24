@@ -22,8 +22,10 @@ if(!isset($_SESSION['username'])) {
 	<div class="request" style="border-style: solid; margin-top: 10px;">
 		<h1><?php echo $row['username']; ?></h1>
 		<p><?php echo $row['admin_request_letter']; ?></p>
-		<form action="#">
-			<input type="submit" value="Accept">
+		<form action="mvc/controller.php" method="POST">
+			<input type="hidden" value="<?php echo $row['user_id']; ?>" name="user_id">
+			<input type="hidden" value="<?php echo $row['admin_request_id']; ?>"name="admin_request_id">
+			<input type="submit" value="Accept" name="acceptAdminRequestBtn">
 		</form>
 		<form action="#">
 			<input type="submit" value="Reject" style="background-color: red;">
