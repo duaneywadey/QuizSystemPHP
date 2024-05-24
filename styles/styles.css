@@ -4,8 +4,13 @@ body {
 }
 
 table, th, td{
-	border: 1px solid black;
+	border: 1px solid gray;
 }
+
+.tbl {
+	width: 1000px;
+}
+
 
 input[type="text"] {
 	display: block;

@@ -213,6 +213,33 @@ function validateAnswer($conn, $question_id, $choice_id) {
 	}
 
 }
+
+function insertNewQuizScore($conn, $user_id, $quiz_id, $score, $no_of_items) {
+	$sql = "INSERT INTO quiz_scores (user_id, quiz_id, score, no_of_items) 
+	VALUES(?,?,?,?)
+			";
+	$stmt = $conn->prepare($sql);
+	return $stmt->execute([$user_id, $quiz_id, $score, $no_of_items]);
+}
+
+function showScoresByUserID($conn, $user_id) {
+	$sql = "SELECT 
+				users.user_id AS user_id,
+				users.username AS username,
+				quizzes.title AS quiz_title,
+				quiz_scores.score AS score,
+				quiz_scores.no_of_items AS no_of_items,
+				quiz_scores.date_added AS date_added
+			FROM quiz_scores
+			JOIN users ON quiz_scores.user_id = users.user_id
+			JOIN quizzes ON quiz_scores.quiz_id = quizzes.quiz_id
+			WHERE users.user_id = ?
+			ORDER BY quiz_scores.date_added
+			";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute([$user_id]);
+	return $stmt->fetchAll();
+}
  
 
 

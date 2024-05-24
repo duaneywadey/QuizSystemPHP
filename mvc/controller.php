@@ -93,8 +93,12 @@ if(isset($_POST['submitAnswersBtn'])) {
 			$counter+=1;
 		}
 	}
-	echo "<br>Score: " . $counter . "/" . count($quizResult) . "<br>"; 
-	header("Location: ../displayResult.php?counter=" . $counter . "&quizResult=" . count($quizResult));
+	
+	if(insertNewQuizScore($conn, $_SESSION['user_id'], $_GET['quiz_id'], $counter, count($quizResult))) {
+		// header("Location: ../displayResult.php?counter=" . $counter . "&quizResult=" . count($quizResult));
+		header("Location: ../submissions.php");
+	}
+
 
 }
 
